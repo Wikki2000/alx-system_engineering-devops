@@ -1,2 +1,2 @@
 #!/bin/bash
-ls -a1 --group-directories-first | { read -r line && printf "%s" "$line"; while read -r line; do printf ",%s" "$line"; done; echo; }
+ls -amvp
