@@ -1,0 +1,1 @@
+[ "$(stat -c %U hello)" = "guillaume" ] && chown betty hello [ "$(stat -c %U hello)" = "guillaume" ] && chown betty hello
