@@ -1,4 +1,4 @@
-#Shell, init files, variables and expansions
+# Shell, init files, variables and expansions
 In  a shell, like bash or zsh, init files (e.g., .bashrc or zshrc) are used to set up the shell environment, define variables and configure the shell's behaviour. Variables store data, and expansion are used to replace variables or run commands, allowing you to customize your shell experience and automate task efficiently. <br>This repository houses some of the key shell variable expansion commands. This script is written inside each file for a specific purpose. The 
 description of each folder is shown in the table beloow:
 |SN |    FILES    |DESCRIPTION OF FILES|
