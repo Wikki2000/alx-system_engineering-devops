@@ -11,8 +11,7 @@ description of each folder is shown in the table beloow:
 |5  |5-local_variables| A script that lists all local variables and environment variables, and functions.|
 |6  |6-create_local_variable|A script that creates a new local variable.|
 |7  | 7-create_global_variable| A script that creates a new global variable.|
-|8  |8-true_knowledge| A script that prints the result of the addition of 128 with the value stored in the environment variable TRUEKNOWLEDGE, followed by a 
-new line.|
+|8  |8-true_knowledge| A script that prints the result of the addition of 128 with the value stored in the environment variable TRUEKNOWLEDGE, followed by a new line.|
 |9 |9-divide_and_rule|A script that prints the result of POWER divided by DIVIDE, followed by a new line.|
 |10 |10-love_exponent_breath| A script that displays the result of BREATH to the power LOVE|
 |11|11-binary_to_decimal| A script that converts a number from base 2 to base 10.|
