@@ -1,0 +1,12 @@
+#!/bin/bash
+# This script display all non-hidden files in the current directory
+
+# Loop through non-hidden files in the current directory
+for file in *
+do
+	name_after_dash=$(echo "$file" | cut -d'-' -f2-)
+
+	# Display the result in a list format
+	echo "$name_after_dash"
+done
+
