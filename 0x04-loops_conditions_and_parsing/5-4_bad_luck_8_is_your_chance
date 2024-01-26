@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# This script print "bad luck" on 4th position and "good luck" on 8th position
+# While others display "Best School" 
 
 i=1
 while [ $i -le 10 ]; do
