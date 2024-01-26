@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # This script display all non-hidden files in the current directory
 
 # Loop through non-hidden files in the current directory
