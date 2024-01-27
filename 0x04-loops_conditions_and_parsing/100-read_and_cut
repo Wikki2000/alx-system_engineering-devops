@@ -13,9 +13,9 @@ fi
 # Read the file line by line using a for loop
 while read -r line; do
 	# Extract fields to a var
-	username=$(echo $line | cut -d':' -f1) # Username is in f1 of file
-	userid=$(echo $line | cut -d':' -f2) # User id is in f2
-	home=$(echo $line | cut -d':' -f6)
+	username=$(echo "$line" | cut -d':' -f1) # Username is in f1 of file
+	uid=$(echo "$line" | cut -d':' -f2) # User id is in f2
+	home=$(echo "$line" | cut -d':' -f6)
 
 	# Display username, user id, and home directory
 	echo "$username:$uid:$home"
