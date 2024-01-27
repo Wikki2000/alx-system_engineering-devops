@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# This script displays the content of the file /etc/passwd
 
 # Path to the /etc/passwd file
 passwd_file="/etc/passwd"
