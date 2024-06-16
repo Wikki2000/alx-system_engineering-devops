@@ -37,8 +37,10 @@ def display_todo_progress(user, todos):
             count_completed_tasks += 1
             list_of_completed_tasks.append(task["title"])
 
-    print(f"User {user['name']} has {total_tasks} tasks in total.")
-    print(f"Completed {count_completed_tasks} tasks.")
+    print(f"Employee {user['name']} is done with tasks" +
+            f"({count_completed_tasks}/{total_tasks}):")
+    for task in list_of_completed_tasks:
+        print("\t " + task)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
