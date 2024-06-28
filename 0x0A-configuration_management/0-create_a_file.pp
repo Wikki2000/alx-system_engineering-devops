@@ -1,4 +1,4 @@
-# Creates a file with content
+# Creates a file with some content
 file { '/tmp/school':
   mode    => '0744',
   owner   => 'www-data',
