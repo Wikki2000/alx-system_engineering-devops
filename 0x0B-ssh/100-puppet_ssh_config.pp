@@ -1,3 +1,5 @@
+# make changes to our configuration files
+
 exec { 'add_identityfile_to_ssh_config':
   command => 'echo "    IdentityFile ~/.ssh/school" >> /etc/ssh/ssh_config',
   provider => shell,
