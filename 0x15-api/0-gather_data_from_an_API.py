@@ -6,6 +6,7 @@ Usage: python3 <script_name.py> <employee_id>
 import requests
 import sys
 
+
 def fetch_user_data(employee_id):
     base_url = "https://jsonplaceholder.typicode.com"
     try:
@@ -15,7 +16,8 @@ def fetch_user_data(employee_id):
         user = user_response.json()
 
         # Fetch TODO list for the user
-        todos_response = requests.get(f"{base_url}/todos/", params={"userId": employee_id})
+        todos_response = requests.get(f"{base_url}/todos/",
+                params={"userId": employee_id})
         todos_response.raise_for_status()
         todos = todos_response.json()
 
@@ -50,4 +52,3 @@ if __name__ == "__main__":
     employee_id = sys.argv[1]
     user, todos = fetch_user_data(employee_id)
     display_todo_progress(user, todos)
-
