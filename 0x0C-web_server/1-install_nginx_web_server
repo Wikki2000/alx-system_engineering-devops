@@ -11,7 +11,6 @@ apt-get -y install nginx
 if [ ! -e '/etc/nginx/html' ]; then
 	mkdir /etc/nginx/html
 fi
-touch /etc/nginx/html/index.html
 echo 'Hello World!' > /etc/nginx/html/index.html
 sed -i 's@/var/www/html@/etc/nginx/html@g' /etc/nginx/sites-enabled/default
 
