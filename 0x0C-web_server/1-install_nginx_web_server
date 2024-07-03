@@ -14,4 +14,4 @@ fi
 echo 'Hello World!' > /etc/nginx/html/index.html
 sed -i 's@/var/www/html@/etc/nginx/html@g' /etc/nginx/sites-enabled/default
 
-systemctl start nginx
+systemctl restart nginx
