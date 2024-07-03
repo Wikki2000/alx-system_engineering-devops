@@ -18,6 +18,9 @@ fi
 # Create the index.html file with "Hello World!" content
 echo 'Hello World!' > /var/www/html/index.html
 
+# Make sure the Nginx configuration points to the default root directory
+sed -i 's@root /var/www/html@root /var/www/html@g' /etc/nginx/sites-enabled/default
+
 # Stop Apache if it's running
 systemctl stop apache2
 systemctl disable apache2
