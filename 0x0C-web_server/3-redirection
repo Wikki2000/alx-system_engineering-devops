@@ -8,7 +8,7 @@ FILE_PATH=/var/www/html;
 if [ ! -e "$FILE_PATH" ]; then
         mkdir "$FILE_PATH"
 fi
-touch "$FILE_PATH"/index.html
+
 echo "Hello World!" > "$FILE_PATH"/index.html
 echo "server {
         listen 80 default_server;
