@@ -1,17 +1,24 @@
 #!/usr/bin/env bash
-# program to install nginx on a server
+# Program to install nginx on a server
 # > Install nginx on your web-01 server
 # > Nginx should be listening on port 80
-# > Nginx should return 'hello World!' when querying the server
+# > Nginx should return 'Hello World!' when querying the server
 
-
+# Update the package list
 apt-get update
+
+# Install nginx
 apt-get -y install nginx
 
-if [ ! -e '/etc/nginx/html' ]; then
-	mkdir /etc/nginx/html
+# Ensure the /var/www/html directory exists
+if [ ! -e '/var/www/html' ]; then
+    mkdir -p /var/www/html
 fi
-echo 'Hello World!' > /etc/nginx/html/index.html
-sed -i 's@/var/www/html@/etc/nginx/html@g' /etc/nginx/sites-enabled/default
 
+# Create the index.html file with "Hello World!" content
+echo 'Hello World!' > /var/www/html/index.html
+
+# Restart nginx to apply changes
 service nginx restart
+
+echo "Nginx installed and configured successfully."
