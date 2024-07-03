@@ -20,6 +20,7 @@ echo 'Hello World!' > /var/www/html/index.html
 
 # Make sure the Nginx configuration points to the default root directory
 sed -i 's@root /var/www/html@root /var/www/html@g' /etc/nginx/sites-enabled/default
+sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
 
 # Stop Apache if it's running
 systemctl stop apache2
