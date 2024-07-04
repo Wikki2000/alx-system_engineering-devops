@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+# > Configure Nginx server to have a custom 404 page
+# > that contains the string Ceci n'est pas une page.
+
 # Check if nginx is installed
 if [ ! -e /usr/sbin/nginx ]; then
         apt-get update
@@ -37,5 +41,5 @@ echo "server {
         }
 }" > /etc/nginx/sites-available/default;
 
-service nginx restart;
+service restart nginx
 echo "Nginx configured with custom 404 page successfully.";
