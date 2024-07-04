@@ -20,6 +20,12 @@ fi
 echo "Ceci n'est pas une page" > /var/www/html/404.html
 echo 'Hello World!' > /var/www/html/index.html
 
+# Remove any existing symlink
+rm /etc/nginx/sites-enabled/default
+
+# Create a new symbolic link
+sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+
 echo "server {
         listen 80 default_server;
         listen [::]:80 default_server;
