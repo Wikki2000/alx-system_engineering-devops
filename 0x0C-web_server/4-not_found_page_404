@@ -16,9 +16,6 @@ if [ ! -e /var/www/html ]; then
     mkdir -p /var/www/html
 fi
 
-# Prepare the custom file
-echo "Ceci n'est pas une page" > /var/www/html/404.html
-echo 'Hello World!' > /var/www/html/index.html
 
 echo "server {
         listen 80 default_server;
