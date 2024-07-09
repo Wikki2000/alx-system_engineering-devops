@@ -1,24 +1,47 @@
 #!/usr/bin/env bash
-# Configure nginx web server with custom response header
+# > Configure Nginx server to have a custom 404 page
+# > that contains the string Ceci n'est pas une page.
 
-INDEX_COPY="Hello World!"
-ERROR_COPY="Ceci n'est pas une page - 404"
+# Check if nginx is installed
+if [ ! -e /usr/sbin/nginx ]; then
+        apt-get update
+        apt-get -y install nginx
+        echo "Nginx installed successfully."
+else
+        echo "Nginx is already installed."
+fi
 
-sudo apt-get -y update
-sudo apt-get -y install nginx
+# Ensure that the directory is present.
+if [ ! -e /var/www/html ]; then
+    mkdir -p /var/www/html
+fi
 
-echo "$INDEX_COPY" | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
-echo "$ERROR_COPY" | sudo tee /var/www/html/custom_404.html > /dev/null
+# Prepare the custom file
+echo "Ceci n'est pas une page" > /var/www/html/404.html
+echo 'Hello World!' > /var/www/html/index.html
 
-# config redirection
-sudo sed -i '/^\sserver_name.*/a \        rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
+echo "server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        add_header X-Served-By \$HOSTNAME;
 
-# config custom 404
-sudo sed -i '/^\slocation.*/i \        error_page 404 /custom_404.html;' /etc/nginx/sites-available/default
+        root /var/www/html;
+        index index.html index.htm;
 
-# shellcheck disable=SC2154
-# config custom response header
-sudo sed -i '/^\slocation.*/i \        add_header X-Served-By $hostname;' /etc/nginx/sites-available/default
+        location / {
+                try_files \$uri \$uri/ =404;
+        }
 
-# run server
-sudo service nginx start
+        location /redirect_me {
+                return 301 https://youtube.com/;
+        }
+
+        error_page 404 /404.html;
+
+        location = /404.html {
+                internal;
+        }
+}" > /etc/nginx/sites-available/default;
+
+service nginx restart;
+echo "Nginx configured with custom 404 page successfully.";
