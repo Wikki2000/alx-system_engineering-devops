@@ -1,45 +1,47 @@
 #!/usr/bin/env bash
-# We are configuring web-02 to be identical to web-01.
-# We use bash scripts to automate our work.
+# > Configure Nginx server to have a custom 404 page
+# > that contains the string Ceci n'est pas une page.
 
-# Update package list and install Nginx
-sudo apt-get update -y
-sudo apt-get install -y nginx
+# Check if nginx is installed
+if [ ! -e /usr/sbin/nginx ]; then
+        apt-get update
+        apt-get -y install nginx
+        echo "Nginx installed successfully."
+else
+        echo "Nginx is already installed."
+fi
 
-# Allow HTTP traffic
-sudo ufw allow 'Nginx HTTP'
+# Ensure that the directory is present.
+if [ ! -e /var/www/html ]; then
+    mkdir -p /var/www/html
+fi
 
-# Path to the Nginx configuration file
-NGINX_CONF="/etc/nginx/sites-available/default"
+# Prepare the custom file
+echo "Ceci n'est pas une page" > /var/www/html/404.html
+echo 'Hello World!' > /var/www/html/index.html
 
-echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html
+echo "server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        add_header X-Served-By \$HOSTNAME;
 
-string="server_name _;"
-string+="\n\trewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;"
+        root /var/www/html;
+        index index.html index.htm;
 
-sudo sed -i "s@server_name _;@$string@" $NGINX_CONF
+        location / {
+                try_files \$uri \$uri/ =404;
+        }
 
-# Creating a 404 Custom error page
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
+        location /redirect_me {
+                return 301 https://youtube.com/;
+        }
 
-mystring="listen 80 default_server;\n\terror_page 404 \/404.html;\n\tlocation = \/404.html {\n\t\troot \/var\/www\/html;\n\t\tinternal;\n\t}"
+        error_page 404 /404.html;
 
+        location = /404.html {
+                internal;
+        }
+}" > /etc/nginx/sites-available/default;
 
-sudo sed -i "s/listen 80 default_server;/$mystring/" $NGINX_CONF
-
-# We are placing our webservers behind a load balancer.
-# We add a custom Nginx response header(on both web servers) so as to keep track of which web server is handling our requests
-# The name of the custom HTTP header must be X-Served-By.
-# Its value must be the hostname of the server Nginx is running on
-# We use the Nginx add_header directive to set arbitrary headers in the global nginx.conf configuration file.
-# Then use the HOSTNAME variable to get the name of the machine/server
-
-CONF="/etc/nginx/nginx.conf"
-
-sed -i '15a \\t add_header X-Served-By '"${HOSTNAME}"';' $CONF
-
-# Test the Nginx configuration
-sudo nginx -t
-
-# Restart Nginx
-sudo service nginx restart
+service nginx restart;
+echo "Nginx configured successfully.";
