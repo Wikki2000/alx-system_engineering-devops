@@ -1,23 +1,11 @@
 #!/usr/bin/env bash
 # Script to install and configure HAProxy on a new Ubuntu machine
 
-# Exit immediately if a command exits with a non-zero status
-set -e
-
 # Update package list and install HAProxy
 sudo apt-get -y update
 sudo apt-get install -y haproxy
 
-# Enable HAProxy to start on boot
-sudo systemctl enable haproxy
-
-# Add hostnames to /etc/hosts
-echo "54.165.77.76 516317-web-01" | sudo tee -a /etc/hosts
-echo "34.239.248.129 516317-web-02" | sudo tee -a /etc/hosts
-
-# Configure HAProxy
-sudo tee /etc/haproxy/haproxy.cfg > /dev/null <<EOL
-global
+echo "global
     log /dev/log local0
     log /dev/log local1 notice
     chroot /var/lib/haproxy
@@ -43,18 +31,16 @@ defaults
     errorfile 503 /etc/haproxy/errors/503.http
     errorfile 504 /etc/haproxy/errors/504.http
 
-frontend http_front
-    bind *:80
-    stats uri /haproxy?stats
-    default_backend http_back
-
-backend http_back
+backend web-backend
     balance roundrobin
-    server web01 54.165.77.76:80 check
-    server web02 34.239.248.129:80 check
-EOL
+    server web-01 54.165.77.76:80 check
+    server web-02 34.239.248.129:80 check
 
-# Restart HAProxy to apply the new configuration
+frontend http
+    bind *:80
+    mode http
+    default_backend web-backend" > /etc/haproxy/haproxy.cfg
+
 sudo service haproxy start
 
 # Check if HAProxy is running correctly
