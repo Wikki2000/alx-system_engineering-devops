@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
 # Script to install and configure HAProxy on a new Ubuntu machine
 
+# Variables for server IP addresses and hostnames
+WEB01_IP="54.165.77.76"
+WEB02_IP="34.239.248.129"
+WEB01_HOSTNAME="516317-web-01"
+WEB02_HOSTNAME="516317-web-02"
+
 # Update package list and install HAProxy
 sudo apt-get -y update
 sudo apt-get install -y haproxy
 
-# Create HAProxy configuration
-echo "global
+# Configure HAProxy
+sudo tee /etc/haproxy/haproxy.cfg > /dev/null <<EOL
+global
     log /dev/log local0
     log /dev/log local1 notice
     chroot /var/lib/haproxy
@@ -34,16 +41,20 @@ defaults
 
 backend web-backend
     balance roundrobin
-    server web-01 54.165.77.76:80 check
-    server web-02 34.239.248.129:80 check
+    server $WEB01_HOSTNAME $WEB01_IP:80 check
+    server $WEB02_HOSTNAME $WEB02_IP:80 check
 
 frontend http
     bind *:80
     mode http
-    default_backend web-backend" | sudo tee /etc/haproxy/haproxy.cfg > /dev/null
+    default_backend web-backend
+EOL
 
 # Start HAProxy service
 sudo service haproxy start
+
+# Ensure HAProxy is enabled to start at boot
+sudo systemctl enable haproxy
 
 # Check if HAProxy is running correctly
 if systemctl is-active --quiet haproxy; then
@@ -51,3 +62,14 @@ if systemctl is-active --quiet haproxy; then
 else
     echo "HAProxy failed to start. Check the configuration and try again."
 fi
+
+# Set hostnames for web servers
+echo "Setting hostnames for web servers..."
+
+# Configure hostname for web-01
+echo "$WEB01_IP $WEB01_HOSTNAME" | sudo tee -a /etc/hosts > /dev/null
+
+# Configure hostname for web-02
+echo "$WEB02_IP $WEB02_HOSTNAME" | sudo tee -a /etc/hosts > /dev/null
+
+echo "Hostnames configured: $WEB01_HOSTNAME and $WEB02_HOSTNAME"
