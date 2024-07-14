@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
-# Install and configerring nginx web server with header
+# Install and configure nginx web server with header
 
+# Update apt repositories and install nginx
 sudo apt-get -y update
 sudo apt-get -y install nginx
 
+# Create basic HTML files
 echo "Hello World!" | sudo tee /var/www/html/index.html
 echo "Ceci n'est pas une page" | sudo tee /var/www/html/error_404.html
-sudo sed -i '/listen [::]:80 default_server;/a add_header X-Served-By \$hostname;' \
-/etc/nginx/sites-available/default
+
+# Add custom header to Nginx configuration
+sudo sed -i '/listen [::]:80 default_server;/a add_header X-Served-By $(hostname);' /etc/nginx/sites-available/default
+
+# Restart Nginx service to apply configuration changes
 sudo service nginx restart
