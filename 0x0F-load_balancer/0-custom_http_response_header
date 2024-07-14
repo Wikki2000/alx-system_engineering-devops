@@ -1,16 +1,32 @@
 #!/usr/bin/env bash
-# Install and configure nginx web server with header
+# Install and configerring nginx web server with header
 
-# Update apt repositories and install nginx
 sudo apt-get -y update
 sudo apt-get -y install nginx
 
-# Create basic HTML files
 echo "Hello World!" | sudo tee /var/www/html/index.html
 echo "Ceci n'est pas une page" | sudo tee /var/www/html/error_404.html
+echo "
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
 
-# Add custom header to Nginx configuration
-sudo sed -i '/listen [::]:80 default_server;/a add_header X-Served-By $(hostname);' /etc/nginx/sites-available/default
+        add_header X-Served-By \$hostname;
 
-# Restart Nginx service to apply configuration changes
+        root /var/www/html;
+
+        # Add index.php to the list if you are using PHP
+        index index.html index.htm index.nginx-debian.html;
+
+	error_page 404 /error_404.html;
+
+	location = /error_404.html {
+		root /var/www/html;
+		internal;
+	}
+
+        location /redirect_me {
+                return 301 https://www.nginx.com/blog/creating-nginx-rewrite-rules/;
+        }
+}" | sudo tee /etc/nginx/sites-available/default
 sudo service nginx restart
