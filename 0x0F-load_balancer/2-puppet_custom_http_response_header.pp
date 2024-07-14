@@ -19,6 +19,6 @@ exec { 'update':
 
 # restarting nginx
 -> exec { 'service -y nginx':
-  command => '/usr/sbin/service nginx restart',
+  command  => '/usr/sbin/service nginx restart',
   provider => shell,
 }
