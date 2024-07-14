@@ -1,28 +1,20 @@
 #!/usr/bin/env bash
-# Usage: ./0-world_wide_web <domain> [subdomain]
-# Display information about subdomains.
+# show dimains info
 
-domain_information () {
-    # Fetch DNS record information
-    ip=$(dig +short "$2"."$1")
-    if [ -n "$ip" ]; then
-        echo "$ip"
-    else
-        echo "No record found for $2.$1"
-    fi
+
+info () {
+	record=$(dig "$2.$1" | grep -A1 'ANSWER SECTION:' | tail -1 | awk '{print $4}')
+	ip=$(dig "$2.$1" | grep -A1 'ANSWER SECTION:' | tail -1 | awk '{print $5}')
+	echo "The subdomain $2 is a $record record and points to $ip"
 }
 
-if [ "$#" -eq 1 ]; then
-  # If only the domain is provided, check the default subdomains
-  domain_information "$1" "www"
-  domain_information "$1" "lb-01"
-  domain_information "$1" "web-01"
-  domain_information "$1" "web-02"
-elif [ "$#" -eq 2 ]; then
-  # If both domain and subdomain are provided, check the specific subdomain
-  domain_information "$1" "$2"
+if [ "$#" = 1 ]
+then
+    subs=("www" "lb-01" "web-01" "web-02")
+    for name in "${subs[@]}"
+    do
+		info "$1" "$name"
+    done
 else
-  # If the arguments are not as expected, display usage
-  echo "Usage: $0 <domain> [subdomain]"
+	info "$1" "$2"
 fi
-
