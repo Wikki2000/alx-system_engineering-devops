@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
-# generates a MySQL dump and creates a compressed archive out of it.
+# Generates a MySQL dump and creates a compressed archive out of it.
 
-# Check if password is pass as arguements.
+# Check if password is passed as an argument.
 if [ -z "$1" ]; then
-     echo "Usage: "$0" <mysql_root_password>"
+     echo "Usage: $0 <mysql_root_password>"
      exit 1
 fi
 
+# Generate the MySQL dump
 mysqldump --all-databases -u root --password="$1" > backup.sql
-today=$(date +"%d-%m-%y.tar.gz")
-tar -czf "$today" backup.sql
+
+# Get the current date in the required format
+today=$(date +"%d-%m-%y")
+
+# Create a gzip compressed archive of the MySQL dump
+gzip -c backup.sql > "$today.tar.gz"
