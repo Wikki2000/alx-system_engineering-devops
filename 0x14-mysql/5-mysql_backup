@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 # generates a MySQL dump and creates a compressed archive out of it.
+
+# Check if password is pass as arguements.
+if [ -z "$1" ]; then
+     echo "Usage: "$0" <mysql_root_password>"
+     exit 1
+fi
+
 mysqldump --all-databases -u root --password="$1" > backup.sql
 today=$(date +"%d-%m-%y.tar.gz")
 tar -czf "$today" backup.sql
