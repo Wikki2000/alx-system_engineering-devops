@@ -1,0 +1,7 @@
+#!/usr/env bash
+# Run nginx as nginx user
+
+# Update the default site configuration to listen on port 8080
+chmod 744 /etc/nginx/nginx.conf
+sed -i "s/80/8080/g" /etc/nginx/sites-available/default
+sudo systemctl restart nginx
