@@ -35,5 +35,6 @@ if __name__ == "__main__":
         print(f"Usage: {argv[0]} <id>")
         exit(1)
 
+    id = argv[1]
     employee, employee_todo = fetch_employee_data(id)
     data = write_josn(id, employee, employee_todo)
