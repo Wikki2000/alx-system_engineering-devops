@@ -1,4 +1,4 @@
-#!/usr/bin/bash/python3
+#!/usr/bin/python3
 """Fetches and exports to-do list information for a given employee ID to a CSV file.
 Usage: python3 <1-export_to_CSV.py> <employer_id>
 """
@@ -13,12 +13,10 @@ def fetch_employee_data(employer_id):
     try:
         # Fetch user information
         response = requests.get(f"{url}/users/{employer_id}")
-        response.raise_for_status()
         user = response.json()
 
         # Fetch employee todo list
-        response = requests.get(f"{url}/todos/", {"userId": employer_id})
-        response.raise_for_status()
+        response = requests.get(f"{url}/todos/", params={"userId": employer_id})
         todos = response.json()
         return user, todos
 
@@ -26,12 +24,17 @@ def fetch_employee_data(employer_id):
         print(f"Error fetching data: {e}")
         sys.exit(1)
 
+
 def export_to_csv(user, todos):
     user = user["name"]
     user_id = user["id"]
-    file_name = f"{user["id"]}.csv"
+    file_name = f"{user['id']}.csv"
 
     with open(file_name, w) as csv_file:
+         csv_writer = csv.writer(csv_file)
+
+         for todo in todos:
+             csv_writer.writerow([employee_id, username, todo['completed'], todo['title']])
 
 
 if __name__ == "__main__":
