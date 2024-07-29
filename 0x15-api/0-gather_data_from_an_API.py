@@ -12,13 +12,11 @@ def fetch_user_data(employee_id):
     try:
         # Fetch user information
         user_response = requests.get(f"{base_url}/users/{employee_id}")
-        user_response.raise_for_status()
         user = user_response.json()
 
         # Fetch TODO list for the user
         todos_response = requests.get(f"{base_url}/todos/",
                                       params={"userId": employee_id})
-        todos_response.raise_for_status()
         todos = todos_response.json()
 
         return user, todos
