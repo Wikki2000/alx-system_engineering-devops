@@ -17,7 +17,7 @@ def fetch_user_data(employee_id):
 
         # Fetch TODO list for the user
         todos_response = requests.get(f"{base_url}/todos/",
-                params={"userId": employee_id})
+                                      params={"userId": employee_id})
         todos_response.raise_for_status()
         todos = todos_response.json()
 
@@ -27,22 +27,23 @@ def fetch_user_data(employee_id):
         print(f"Error fetching data: {e}")
         sys.exit(1)
 
+
 def display_todo_progress(user, todos):
     total_tasks = 0
     count_completed_tasks = 0
     list_of_completed_tasks = []
 
-
     for task in todos:
         total_tasks += 1
-        if task["completed"] == True:
+        if task.get("completed"):
             count_completed_tasks += 1
             list_of_completed_tasks.append(task["title"])
 
     print(f"Employee {user['name']} is done with tasks" +
-            f"({count_completed_tasks}/{total_tasks}):")
+          f"({count_completed_tasks}/{total_tasks}):")
     for task in list_of_completed_tasks:
         print("\t " + task)
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
